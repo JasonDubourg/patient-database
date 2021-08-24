@@ -13,6 +13,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
 import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -63,7 +65,12 @@ public class PatientControllerTest {
     @Test
     void findAllPatientsTest() throws Exception{
         // ARRANGE
-        when(patientService.findAllPatients()).thenReturn(new ArrayList<Patient>());
+        Patient patient1 = new Patient("lastName1", "firstName1", "dateOfBirth", "gender", "homeAddress", "phoneNumber");
+        Patient patient2 = new Patient("lastName2", "firstName2", "dateOfBirth", "gender", "homeAddress", "phoneNumber");
+        List<Patient> patientList = new ArrayList<Patient>();
+        patientList.add(patient1);
+        patientList.add(patient2);
+        when(patientService.findAllPatients()).thenReturn(patientList);
         // ACT
         MvcResult mvcResult = this.mockMvc.perform(get("/patients")).andDo(print()).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -77,7 +84,7 @@ public class PatientControllerTest {
     void savePatientTest() throws Exception{
         // ARRANGE
         Patient patientToSave = new Patient("lastName", "firstName", "dateOfBirth", "gender", "homeAddress", "phoneNumber");
-        when(patientService.savePatient(patientToSave)).thenReturn(any(String.class));
+        when(patientService.savePatient(patientToSave)).thenReturn(patientToSave);
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/patient").contentType(MediaType.APPLICATION_JSON).content("{\"lastName\": \"firstName\"}"))
                 .andDo(print()).andReturn();
@@ -96,7 +103,7 @@ public class PatientControllerTest {
         MvcResult mvcResult = mockMvc.perform(delete("/patient/" + id).contentType(MediaType.APPLICATION_JSON)).andDo(print()).andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
         // ASSERT
-        assertEquals(200, response.getStatus());
+        assertEquals(204, response.getStatus());
         verify(patientService, times(1)).deletePatient(id);
     }
 

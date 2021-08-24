@@ -27,15 +27,15 @@ public class PatientService {
         return patientDao.findAll();
     }
 
-    public String savePatient(Patient patient){
+    public Patient savePatient(Patient patient){
         Patient patientDatabase = findByFirstNameAndLastName(patient.getFirstName(), patient.getLastName());
-        String result = "Patient successfully saved";
         if(Objects.isNull(patientDatabase)){
             patientDao.save(patient);
+            patientDatabase = findByFirstNameAndLastName(patient.getFirstName(), patient.getLastName());
         } else {
             throw new PatientNotFoundException("Patient " + patient.getFirstName() + " " + patient.getLastName() + " already exist in database");
         }
-        return result;
+        return patientDatabase;
     }
 
     public String deletePatient(int id){

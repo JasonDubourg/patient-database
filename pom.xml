@@ -74,7 +74,9 @@
 				<version>0.8.5</version>
 				<configuration>
 					<excludes>
-						<exclude>com/abernathyclinic/mediscreen/entity/**/*</exclude>
+						<exclude>com/mediscreen/notedatabase/entity/**/*</exclude>
+						<exclude>com/mediscreen/notedatabase/configuration/**/*</exclude>
+						<exclude>com/mediscreen/notedatabase/**/PatientDatabaseApplication.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>

@@ -58,9 +58,10 @@ public class PatientController {
     @ApiOperation(value = "Sauvegarde un patient")
     @ApiResponses(value = {@ApiResponse(code = 404, message = "Patient { firstName lastName } already exist in database")})
     @PostMapping(value = "/patient", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> savePatient(@RequestBody Patient patient) {
-        String response =  patientService.savePatient(patient);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+    public Patient savePatient(@RequestBody Patient patient) {
+        patientService.savePatient(patient);
+        Patient patientBo = patientService.findByFirstNameAndLastName(patient.getFirstName(), patient.getLastName());
+        return patientBo;
     }
 
     @ApiOperation(value = "Supprimer un patient selon son ID")

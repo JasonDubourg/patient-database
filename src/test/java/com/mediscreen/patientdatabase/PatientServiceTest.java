@@ -1,12 +1,15 @@
 package com.mediscreen.patientdatabase;
 
+import com.mediscreen.patientdatabase.controller.PatientController;
 import com.mediscreen.patientdatabase.dao.PatientDao;
 import com.mediscreen.patientdatabase.entity.Patient;
 import com.mediscreen.patientdatabase.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.mockito.Mockito.verify;
@@ -25,7 +28,7 @@ public class PatientServiceTest {
     @MockBean
     PatientDao patientDao;
 
-    @Mock
+    @Autowired
     PatientService patientService;
 
     Patient patientTest1= new Patient();
@@ -37,13 +40,13 @@ public class PatientServiceTest {
     @Test
     void findByIdTest(){
         Patient patientTest3 = new Patient();
-        Mockito.when(patientDao.findById(1)).thenReturn(patientTest3);
+        Mockito.when(patientService.findById(1)).thenReturn(patientTest3);
         assertNotNull(patientTest3);
     }
 
     @Test
     void findByFirstnameAndLastNameTest(){
-        Mockito.when(patientDao.findByFirstNameAndLastName("John", "Snow")).thenReturn(patientTest4);
+        Mockito.when(patientService.findByFirstNameAndLastName("John", "Snow")).thenReturn(patientTest4);
         assertNotNull(patientTest4);
     }
 
@@ -51,21 +54,21 @@ public class PatientServiceTest {
     void findAllPatientsTest(){
         patientList.add(patientTest1);
         patientList.add(patientTest2);
-        Mockito.when(patientDao.findAll()).thenReturn(patientList);
+        Mockito.when(patientService.findAllPatients()).thenReturn(patientList);
         assertEquals(2, patientList.size());
     }
 
     @Test
     void savePatientTest(){
         String address = "address";
-        Mockito.when(patientDao.findByFirstNameAndLastName(patientTest4.getFirstName(), patientTest4.getLastName())).thenReturn(null);
+        Mockito.when(patientService.findByFirstNameAndLastName(patientTest4.getFirstName(), patientTest4.getLastName())).thenReturn(null);
         assertEquals(address, patientTest4.getAddress());
     }
 
     @Test
     void updatePatientTest(){
         patientTest4.setFirstName("Louis");
-        Mockito.when(patientDao.save(patientTest4)).thenReturn(patientTest4);
+        Mockito.when(patientService.savePatient(patientTest4)).thenReturn(patientTest4);
         assertEquals("Louis", patientTest4.getFirstName());
     }
 
